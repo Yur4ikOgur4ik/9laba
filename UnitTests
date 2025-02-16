@@ -1,0 +1,375 @@
+using System;
+using Лаба9;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+namespace TestProjectStudents
+{
+    [TestClass]
+
+    public sealed class Test1
+    {
+        public void ResetCounter()
+        {
+            Student.ResetCount();
+        }
+        public void ResetArrCounter()
+        {
+            StudentArray.ResetArrCount();
+        }
+        
+        [TestMethod]
+        public void DefaultConstructor_SetsDefaultValues()
+        {
+            //Arrange
+            Student expected = new Student();
+            //Assert
+            Assert.AreEqual("NameNotSet", expected.Name);
+            Assert.AreEqual(0, expected.Age);
+            Assert.AreEqual(0, expected.GPA);
+        }
+        [TestMethod]
+        public void ParametrizedConstructor_SetsParamValues()
+        {
+            string name = "Sigma boy";
+            int age = 18;
+            double gpa = 8.1;
+            Student expected = new Student(name, age, gpa);
+            Assert.AreEqual(name, expected.Name);
+            Assert.AreEqual(age, expected.Age);
+            Assert.AreEqual(gpa, expected.GPA);
+        }
+        [TestMethod]
+        public void CopyConstructor_SetsCopiesValues()
+        {
+            Student expected = new Student("Walluh", 78, 0.2);
+            Student copied = new Student(expected);
+            Assert.AreEqual(expected.Name, copied.Name);
+            Assert.AreEqual(expected.Age, copied.Age);
+            Assert.AreEqual(expected.GPA, copied.GPA);
+        }
+        [TestMethod]
+        public void CopyConstructor_EnsureDeepCopy()
+        {
+            Student expected = new Student("Obamna", 19, 9.1);
+            Student copied = new Student(expected);
+            expected.Name = "Soda";
+            expected.Age = 9;
+            expected.GPA = 1.9;
+            Assert.AreNotEqual(expected.Name, copied.Name);
+            Assert.AreNotEqual(expected.Age, copied.Age);
+            Assert.AreNotEqual(expected.GPA, copied.GPA);
+
+        }
+        [TestMethod]
+
+        public void AgeComparisonStatic_SameAge()
+        {
+            int expected = 0;
+            Student s1 = new Student("Kartofel", 18, 9.1);
+            Student s2 = new Student("Morkov", 18, 8.9);
+            Assert.AreEqual(expected, Student.AgeComparison(s1, s2));
+        }
+        [TestMethod]
+        public void AgeCompStatic_S1IsOlder()
+        {
+            int expected = 1;
+            Student s1 = new Student("Kartofel", 18, 9.1);
+            Student s2 = new Student("Morkov", 16, 8.9);
+            Assert.AreEqual(expected, Student.AgeComparison(s1, s2));
+        }
+        [TestMethod]
+        public void AgeCompStatic_S1IsYonger()
+        {
+            int expected = -1;
+            Student s1 = new Student("Kartofel", 10, 9.1);
+            Student s2 = new Student("Morkov", 16, 8.9);
+            Assert.AreEqual(expected, Student.AgeComparison(s1, s2));
+        }
+        [TestMethod]
+        public void GpaComparisonNotStatic_SameGPA()
+        {
+            int expected = 0;
+            Student s1 = new Student("Kartofel", 18, 9.1);
+            Student s2 = new Student("Morkov", 18, 9.1);
+            Assert.AreEqual(expected, s1.GpaComparison(s2));
+        }
+        [TestMethod]
+        public void AgeCompNotStatic_S1IsHigher()
+        {
+            int expected = 1;
+            Student s1 = new Student("Kartofel", 18, 9.1);
+            Student s2 = new Student("Morkov", 16, 8.9);
+            Assert.AreEqual(expected, s1.GpaComparison(s2));
+        }
+        [TestMethod]
+        public void GpaCompNotStatic_S1IsLower()
+        {
+            int expected = -1;
+            Student s1 = new Student("Kartofel", 10, 5.1);
+            Student s2 = new Student("Morkov", 16, 8.9);
+            Assert.AreEqual(expected, s1.GpaComparison(s2));
+        }
+        [TestMethod]
+        public void ToUpperOperator()
+        {
+            Student s1 = new Student("kTOtUta", 19, 9.1);
+            s1 = ~s1;
+
+            Assert.AreEqual(s1.Name, "Ktotuta");
+            Assert.AreEqual(s1.Age, 19);
+            Assert.AreEqual(s1.GPA, 9.1);
+
+        }
+        [TestMethod]
+        public void AgeIncOperator()
+        {
+            Student s1 = new Student("Pivooo", 18, 9.1);
+            int expected = s1.Age;
+            expected++;
+            s1++;
+            Assert.AreEqual(s1.Age, expected);
+
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_AgeLower18()
+        {
+            int course;
+            Student s1 = new Student("Joe", 17, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, -1);
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_Age18()
+        {
+            int course;
+            Student s1 = new Student("Joe", 18, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, 1);
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_Age19()
+        {
+            int course;
+            Student s1 = new Student("Joe", 19, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, 2);
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_Age20()
+        {
+            int course;
+            Student s1 = new Student("Joe", 20, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, 3);
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_Age21()
+        {
+            int course;
+            Student s1 = new Student("Joe", 21, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, 4);
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_Age22()
+        {
+            int course;
+            Student s1 = new Student("Joe", 22, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, 5);
+        }
+        [TestMethod]
+        public void ExplicitOperatorInt_AgeHigherThan22()
+        {
+            int course;
+            Student s1 = new Student("Joe", 23, 0.2);
+            course = (int)s1;
+            Assert.AreEqual(course, -1);
+        }
+        [TestMethod]
+        public void ImplicitOperatorBool_GpaLowerThan6()
+        {
+            bool actual;
+            Student s1 = new Student("jjj", 10, 5.9);
+            actual = s1;
+            Assert.IsTrue(actual);
+        }
+        [TestMethod]
+        public void ImplicitOperatorBool_GpaHigherThan6()
+        {
+            bool actual;
+            Student s1 = new Student("jjj", 10, 6.9);
+            actual = s1;
+            Assert.IsFalse(actual);
+        }
+        [TestMethod]
+        public void BinaryOperatorNewStudent()
+        {
+            Student s1 = new Student("Roland", 19, 10);
+            Student s2 = s1 % "Stepan";
+            Assert.AreEqual(s2.Name, "Stepan");
+            Assert.AreEqual(s1.Age, s2.Age);
+            Assert.AreEqual(s1.GPA, s2.GPA);
+            Assert.AreNotEqual(s1.Name, s2.Name);
+        }
+        [TestMethod]
+        public void BinaryOperatorDecreaseGPA_GPAAbove0()
+        {
+            double dec = 4;
+            double GPA = 8.1;
+            Student s1 = new Student("Name", 18, GPA);
+            s1 = s1 - dec;
+            Assert.AreEqual(s1.GPA, GPA - dec);
+
+        }
+        [TestMethod]
+        public void BinaryOperatorDecreaseGPA_GPABelow0()
+        {
+            double dec = 4;
+            double GPA = 2.1;
+            Student s1 = new Student("Name", 18, GPA);
+            s1 = s1 - dec;
+            Assert.AreEqual(s1.GPA, 0);
+
+        }
+        [TestMethod]
+        public void GetCount()
+        {
+            ResetCounter();
+            Student s1 = new Student();
+            Student s2 = new Student("Jo", 10, 10);
+            Student s3 = new Student(s2);
+            int count = Student.GetCount;
+            Assert.AreEqual(count, 3);
+        }
+        [TestMethod]
+        public void ResetCount()
+        {
+            Student s1 = new Student();
+            Student s2 = new Student("k", 10, 10);
+            Student s3 = new Student(s2);
+            Student.ResetCount();
+            int count = Student.GetCount;
+            Assert.AreEqual(count, 0);
+        }
+
+
+        //Collection Tests
+        [TestMethod]
+        public void DefaultConstructor()
+        {
+            StudentArray array = new StudentArray();
+            Assert.AreEqual(0, array.Len);
+        }
+        
+        [TestMethod]
+        public void ParameterizedConstructor()
+        {
+            StudentArray array = new StudentArray(5);
+            Assert.AreEqual(5, array.Len);
+        }
+        [TestMethod]
+        public void ParameterizedConstructor_StudentsNotNull()
+        {
+            StudentArray array = new StudentArray(3);
+            for (int i = 0; i < array.Len; i++)
+            {
+                Assert.IsNotNull(array[i]);
+            }
+        }
+        [TestMethod]
+        public void CopyConstructor_CreatesDeepCopy()
+        {
+            StudentArray original = new StudentArray(2);
+            StudentArray copy = new StudentArray(original);
+
+            Assert.AreEqual(original.Len, copy.Len);
+            Assert.AreNotSame(original, copy); //Убеждаемся что это разные объекты
+
+            for (int i = 0; i < original.Len; i++)
+            {
+                Assert.AreEqual(original[i].Name, copy[i].Name);
+                Assert.AreEqual(original[i].Age, copy[i].Age);
+                Assert.AreEqual(original[i].GPA, copy[i].GPA);
+                Assert.AreNotSame(original[i], copy[i]); //Убеждаемся, что объекты Student разные.
+            }
+        }
+        [TestMethod]
+        public void Indexer_GetElementAtIndex()
+        {
+            StudentArray array = new StudentArray(3);
+            Student student = array[1];
+            Assert.IsNotNull(student);
+        }
+        [TestMethod]
+        public void TestIndexerException() // Тест исключений индексатора
+        {
+            int age;
+            StudentArray s1 = new StudentArray();
+            IndexOutOfRangeException exception1 = Assert.ThrowsException<IndexOutOfRangeException>(() => s1[1000] = new Student());
+            IndexOutOfRangeException exception2 = Assert.ThrowsException<IndexOutOfRangeException>(() => age = s1[1000].Age);
+
+            string errorMessage = "Error: index out of range";
+            Assert.AreEqual(errorMessage, exception1.Message);
+            Assert.AreEqual(errorMessage, exception2.Message);
+        }
+        [TestMethod]
+        public void TestIndexerSet() // Тест записи по существующему индексу
+        {
+            StudentArray s1 = new StudentArray(2);
+            s1[0] = new Student("FFFF", 18, 5.2);
+            s1[1] = new Student("AAAA", 20, 2.1);
+            Student ZeroStudent = new Student("FFFF", 18, 5.2);
+            Assert.AreEqual(s1[0].Name, ZeroStudent.Name);
+            Assert.AreEqual(s1[0].Age, ZeroStudent.Age);
+            Assert.AreEqual(s1[0].GPA, ZeroStudent.GPA);
+        }
+        [TestMethod]
+        public void CounterArr()
+        {
+            ResetArrCounter();
+            StudentArray s = new StudentArray();
+            StudentArray s1 = new StudentArray(4);
+            StudentArray s2 = new StudentArray(s1);
+            int count = StudentArray.GetCountArr;
+            Assert.AreEqual(count, 3);
+        }
+
+        [TestMethod]
+        public void ResettedCount()
+        {
+            StudentArray s = new StudentArray();
+            StudentArray s1 = new StudentArray(4);
+            StudentArray s2 = new StudentArray(s1);
+            ResetArrCounter();
+            int count = StudentArray.GetCountArr;
+            Assert.AreEqual(count, 0);
+        }
+
+
+
+        //Тест для функции в Programm
+        [TestMethod]
+        public void HighestGpaStudent_NoSuchStudent()
+        {
+            StudentArray s = new StudentArray(2);
+            s[0] = new Student("aAA", 19, 6);
+            s[1] = new Student("aaaaAA", 19, 5);
+            int index;
+            Program.HighestGPA(s, out index);
+            Assert.AreEqual(-1, index);
+
+        }
+        [TestMethod]
+        public void HighestGpaStudent_SuchStudentExists()
+        {
+            StudentArray s = new StudentArray(2);
+            s[0] = new Student("aAA", 19, 9);
+            s[1] = new Student("aaaaAA", 19, 5);
+            int index;
+            Program.HighestGPA(s, out index);
+            Assert.AreEqual(0, index);
+
+        }
+
+    }
+}
