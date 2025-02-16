@@ -1,0 +1,82 @@
+using Лаба9;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Лаба9
+{
+    public class StudentArray
+    {
+        static Random rnd = new Random();
+        Student[] StudentArr;
+        private static int countarr = 0;
+        public int Len => StudentArr.Length;
+        public static int GetCountArr => countarr;
+        public static void ResetArrCount()
+        {
+            countarr = 0;
+        }
+        
+
+
+        //конструктор без параметров;
+        public StudentArray()
+        {
+            StudentArr = new Student[0];
+            countarr++;
+        }
+
+        //конструктор с параметрами, заполняющий элементы случайными значениями;
+        public StudentArray(int length)
+        {
+            StudentArr = new Student[length];
+            countarr++;
+            for (int i = 0; i < length; i++)
+            {
+                StudentArr[i] = new Student($"Student{i + 1}", rnd.Next(18, 23), Math.Round(rnd.NextDouble() * 10, 1));
+            }
+        }
+
+        //Глубокое копирование
+        public StudentArray(StudentArray other)
+        {
+            countarr++;
+            StudentArr = new Student[other.Len];
+            for (int i = 0; i < other.Len; i++)
+            {
+                StudentArr[i] = new Student(other.StudentArr[i]);
+            }
+        }
+        //Метод для просмотра
+        public void ShowStudents()
+        {
+            if (StudentArr.Length == 0)
+                return;
+            else
+            {
+                for (int i = 0; i < StudentArr.Length; i++)
+                    StudentArr[i].Show();
+            }
+        }
+
+        public Student this[int index]
+        {
+            get
+            {
+                if (index >= 0 && index < Len)
+                    return StudentArr[index];
+                else
+                    throw new IndexOutOfRangeException("Error: index out of range");
+            }
+            set
+            {
+                if (index >= 0 && index < Len)
+                    StudentArr[index] = value;
+                else
+                    throw new IndexOutOfRangeException("Error: index out of range");
+            }
+        }
+    }
+}
